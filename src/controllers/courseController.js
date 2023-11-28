@@ -1,6 +1,6 @@
 const Course = require("../models/courseModel");
 
-const alllCourses = async (req, res) => {
+const allCourses = async (req, res) => {
   try {
     let courses = await Course.find();
     res.json(courses);
@@ -11,7 +11,9 @@ const alllCourses = async (req, res) => {
 const postCourse = async (req, res) => {
   const { name, price, isPublish, tags } = req.body;
   try {
-    let newCourse = await new Course({ name, price, isPublish, tags });
+    let newCourse = await new Course({name,price,isPublish,tags});
+    newCourse.tags = tags ? tags.split(","):[]
+    newCourse.save();
     res.json(newCourse);
   } catch (error) {
     res.json({ message: error.message });
@@ -28,9 +30,15 @@ const getCourse = async (req, res) => {
 const putCourse = async (req, res) => {
   const { name, price, isPublish, tags } = req.body;
   try {
+   const update = {name:name,
+    price:price,
+    isPublish:isPublish,
+    tags:tags ? tags.split(","):[]}
     let course = await Course.findOneAndUpdate(
       { _id: req.params.id },
-      { name, price, isPublish, tags }
+      update,{new:true},
+      //{ name, price, isPublish, tags },
+      //course.tags = tags ? tags.split(","):[]
     );
     res.json({ message: "Course updated successfully", course });
   } catch (error) {
@@ -47,7 +55,7 @@ const removeCourse = async (req, res) => {
 };
 
 module.exports = {
-  alllCourses,
+  allCourses,
   postCourse,
   getCourse,
   putCourse,

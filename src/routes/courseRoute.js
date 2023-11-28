@@ -1,5 +1,5 @@
 const {
-  alllCourses,
+  allCourses,
   postCourse,
   getCourse,
   putCourse,
@@ -7,7 +7,7 @@ const {
 } = require("../controllers/courseController");
 
 const router = require("express").Router();
-router.get("/all", alllCourses);
+router.get("/all", allCourses);
 router.post("/new", postCourse);
 router.get("/:id", getCourse);
 router.put("/:id/edit", putCourse);
